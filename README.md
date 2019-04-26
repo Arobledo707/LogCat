@@ -1,1 +1,1 @@
-# LogCat
+# LogCat --- Discord Bot
