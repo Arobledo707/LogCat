@@ -1,6 +1,6 @@
 # LogCat --- Discord Bot
 Requirements:
-Python 3.5.3 or higher
+Python 3.5.3 or higher  
 Discord.py
 
 --- LogCat Guide Version: 0.10.0 ---
