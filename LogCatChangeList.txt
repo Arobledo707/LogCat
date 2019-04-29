@@ -1,0 +1,48 @@
+0.10.0 Bot Changelist----------------------------------------------------------------------------------------------
+- Updated to discord.py v1.0
+-Changed $GetInfo command to $Version
+-Added $GetRunTime command
+--$runtime or $getruntime
+-Changing from camelCase to lower_case_with_underscores
+-Added bot typing
+
+
+0.9.8 Bot Changelist-------------------------------------------------------------------------------------------------
+-Logs more info about certain exceptions
+--such as what command was used to cause it
+
+-More info about what channels are being logged in console.txt file
+
+
+0.9.7 Bot Changelist--------------------------------------------------------------------------------------------------
+-Fixed bot restart time
+-- Was 600 seconds --> now 60 seconds
+
+-AddAllChannels and RemoveAllChannels commands
+-- sets all text channels to be logged
+-- removes all channels from being logged
+
+--LogYesterday now has logyesterday as an alias
+-- command now works if you use $logyesterday
+
+
+
+0.9.6 Bot Changelist--------------------------------------------------------------------------------------------------
+- Pass strings with spaces using "Pass entire string to function"
+-- If double quotes aren't used then only Pass would be passed into function
+-- Should be able to add channels, roles with this
+
+-Add and Remove Roles
+-- %AddRole student -- would let students be able to use the bot
+-- %removerole student -- would remove students from using the bot
+
+---Bot Console Log
+-Bot will only log a user that does not have permission if they use the correct prefix
+-- user:%help---this message would be logged
+-- user: Hello there! -- this message would not be logged
+
+-- Bot now sends client some exceptions
+- will send on failure to send file
+
+-- Generated XML file does not contain a token.
+- Token needs to be manually entered into XML
