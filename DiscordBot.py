@@ -719,7 +719,7 @@ async def get_logs(context):
     if os.path.exists(ParentDirectory):
         await context.send('Getting all logs...')
         log_name = 'LogCat_logs_All_Logs'
-        shutil.make_archive(LogName, 'zip', ParentDirectory)
+        shutil.make_archive(log_name, 'zip', ParentDirectory)
         try:
             await context.send(file=discord.File(log_name + '.zip', log_name + '.zip'))
             await context.send('Done!')
