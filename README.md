@@ -1,4 +1,8 @@
 # LogCat --- Discord Bot
+Requirements:
+Python 3.5.3 or higher
+Discord.py
+
 --- LogCat Guide Version: 0.10.0 ---
 If this is your first time using LogCat, run the script to create the xml
 It should create this xml file for you:
