@@ -3,12 +3,13 @@
 If this is your first time using LogCat, run the script to create the xml
 It should create this xml file for you:
 
-<?xml version="1.0" encoding="UTF-8"?>
+```xml<?xml version="1.0" encoding="UTF-8"?>
 <LogCat>
 	<Token id="Enter Token Here"/>
 	<Prefix character="$"/>
     <Role name="Admin"/>
 </LogCat>
+```
 
 --- Add a Bot Token ---
 Get your bot token from here
