@@ -841,7 +841,7 @@ the later date are returned from that channel"""
             shutil.make_archive(LogName, 'zip', ParentDirectory + '/' + channelNamePath)
     # send the logs with the channel's name
     try:
-        await context.send_file(file=discord.File(LogName + '.zip', LogName + '.zip'))
+        await context.send(file=discord.File(LogName + '.zip', LogName + '.zip'))
         await context.send('Logs Sent!')
     except Exception as e:
         print_and_log(LogTypeInfo, 'Command: ' + 'get_channel_logs')
