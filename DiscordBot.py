@@ -316,13 +316,13 @@ def print_and_log(log_type, string):
     """prints string to console and writes string to log file"""
     print(string)
     if log_type == LogTypeInfo:
-        logging.info(string)
+        logging.info(string, exc_info=True)
     elif log_type == LogTypeWarning:
-        logging.warning(string)
+        logging.warning(string, exc_info=True)
     elif log_type == LogTypeError:
-        logging.error(string)
+        logging.error(string, exc_info=True)
     else:
-        logging.log(string)
+        logging.log(string, exc_info=True)
     
 #-------------------------------------------------------on_ready------------------------------------------------------------------
 @client.event
@@ -758,6 +758,13 @@ the later date are returned from that channel"""
         channel = get_channel_by_name(param2)
     if channel is None and param3 is not None:
         channel = get_channel_by_name(param3)
+    
+    permission_required = await has_permissions(channel)
+
+    if permission_required == False:
+        await context.send(format_message(MessageTypeError, "Error: read_channel_history permission is required."))
+        return
+        
 
     # if no channel wa found return and send error message
     if channel is None:
@@ -795,7 +802,8 @@ the later date are returned from that channel"""
             if os.path.exists(ParentDirectory + '/' + channelNamePath):
                 print('path exists')
             else:
-                await context.send('Attempting to log: ' + ParentDirectory + '/' + channel.name)
+                await context.send(format_message(MessageTypeError,'Error: Logs do not exist'))
+                return
         # check if a first date was entered
         if date1 is not None:
             #if second date was entered compare dates and set earlier date to
@@ -835,10 +843,13 @@ the later date are returned from that channel"""
 
         # if no date was entered send the channel's entire logs
         if date1 is None and date2 is None:
-            sourcePath = ParentDirectory + '/' + channelNamePath
-            distutils.dir_util.copy_tree(sourcePath, path)
-            LogName = 'LogCat_logs_' + channelNamePath
-            shutil.make_archive(LogName, 'zip', ParentDirectory + '/' + channelNamePath)
+            source_path = ParentDirectory + '/' + channelNamePath
+            if os.path.isdir(source_path):
+                distutils.dir_util.copy_tree(source_path, path)
+                LogName = 'LogCat_logs_' + channelNamePath
+                shutil.make_archive(LogName, 'zip', ParentDirectory + '/' + channelNamePath)
+            else:
+                await context.send(format_message(MessageTypeError, 'No Logs available. Sending empty folder'))
     # send the logs with the channel's name
     try:
         await context.send(file=discord.File(LogName + '.zip', LogName + '.zip'))
@@ -1025,6 +1036,14 @@ async def get_runtime(context):
 @client.event
 async def on_error(event, *args, **kwargs):
     print_and_log(LogTypeError, sys.exc_info())
+
+#------------------------------------------------has_permissions----------------------------------------------------------------
+async def has_permissions(channel):
+    """Returns read message history permissions for the specified channel"""
+    server = client.get_guild(ServerID)
+    permissions = channel.permissions_for(server.me)
+    return permissions.read_message_history
+    
 
 #-------------------------------------------------run_client-----------------------------------------------------------------------
 def run_client(client):
