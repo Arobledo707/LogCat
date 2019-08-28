@@ -1,3 +1,8 @@
+0.10.1 Bot Changelist---------------------------------------------------------------------------------------------
+- Added error checking to make sure LogChannel is only called if it is a TextChannel
+- Updated version to 10.0.1
+- logging if it is not a textChannel
+
 0.10.0 Bot Changelist----------------------------------------------------------------------------------------------
 - Updated to discord.py v1.0
 -Changed $GetInfo command to $Version
