@@ -28,7 +28,7 @@ import logging
 logging.basicConfig(filename='./console.txt', filemode='a+', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 # Current version
 # keep this up to date
-Version = '0.10.1'
+Version = '0.10.2'
 
 #------------------------------------------------Constants-------------------------------------------------------------------------
 BotPrefix = []
@@ -252,6 +252,7 @@ the author included"""
     file = open(path + '/' + fileName + '.txt', 'w+')
 #   For each message in a channel from startTime to midnight ---- From a start
 #   time to 24 hours after
+    test = channel.history(limit=LogLimitPerChannel, before=midnight, after=startTime)
     channelMessages = []
     try:
         async for message in channel.history(limit=LogLimitPerChannel, before=midnight, after=startTime):
@@ -1078,5 +1079,6 @@ def run_client(client):
                 print_and_log(LogTypeError, e)
         print_and_log(LogTypeInfo, 'Waiting 60 seconds then restarting')
         time.sleep(60)
-    
+
+print_and_log(LogTypeInfo, "Discord Api Version: " + discord.__version__)
 run_client(client)
