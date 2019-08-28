@@ -28,7 +28,7 @@ import logging
 logging.basicConfig(filename='./console.txt', filemode='a+', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 # Current version
 # keep this up to date
-Version = '0.10.2'
+Version = '0.10.3'
 
 #------------------------------------------------Constants-------------------------------------------------------------------------
 BotPrefix = []
@@ -44,8 +44,6 @@ AutomaticLogging = False
 LogTypeInfo = 0
 LogTypeWarning = 1
 LogTypeError = 2
-
-text_channel_type = 0
 
 ParentDirectory = 'Logs'
 ConsoleLogs = 'console.txt'
@@ -503,7 +501,7 @@ async def log_date(context, date=None, endDate=None):
                 async with context.typing():
                     for channelID in channelsToLog:
                         channel = client.get_channel(channelID)
-                        if(channel._type is text_channel_type):
+                        if(channel.type is discord.ChannelType.text):
                             await LogChannel(channel, firstDate, 'LogDate')
                         else:
                             await context.send("Channel: " + channel.name + " is not a TextChannel!")
@@ -515,7 +513,7 @@ async def log_date(context, date=None, endDate=None):
     async with context.typing():
         for channelID in channelsToLog:
             channel = client.get_channel(channelID)
-            if(channel._type is text_channel_type):
+            if(channel.type is discord.ChannelType.text):
                 await LogChannel(channel, firstDate, 'LogDate')
             else:
                 await context.send("Channel: " + channel.name + " is not a TextChannel!")
@@ -678,7 +676,7 @@ async def add_channel_to_log(context, newChannel):
         if channelID == channel.id:
             await context.send(format_message(MessageTypeWarning, 'Channel: ' + channel.name + '\nID:' + str(channel.id) + '\nHas already been added.'))
             return
-    if(channel._type is not text_channel_type):
+    if(channel.type is not discord.ChannelType.text):
         await context.send(format_message(MessageTypeLog, 'Channel: ' + channel.name + '\nID:' + str(channel.id) + '\nis not a TextChannel and has not been added.'))
         return
     channelsToLog.append(channel.id)
@@ -888,7 +886,7 @@ if it does not exist then it attempts to create a log for that day"""
     else:
         channel = get_channel_by_name(channelName)
         check = GetTimeOffset()
-        if(channel.type is text_channel_type):
+        if(channel.type is discord.ChannelType.text):
             await LogChannel(channel, date + datetime.timedelta(hours=GetTimeOffset()), 'get_channel_logs')
         else:
             print_and_log(LogTypeError, "Channel: " + channel.name + " is not a TextChannel!")
@@ -899,7 +897,7 @@ def get_channel_by_name(channelName):
     """Loops through all channels and returns channel if the channelName was equal to the channel's name"""
     channels = client.get_all_channels()
     for channel in channels:
-        if channel.name.lower() == channelName.lower():
+        if channel.name.lower() == channelName.lower() and channel.type == discord.ChannelType.text:
             return channel
 
 #------------------------------------------------logged_channels------------------------------------------------------------------
@@ -966,7 +964,7 @@ gets each channel and creates logs for yesterday"""
         if channel is None:
             return('Incorrect Channel ID')
         yesterday = datetime.datetime.now() - datetime.timedelta(days=1, hours=datetime.datetime.now().hour - GetTimeOffset(), minutes=datetime.datetime.now().minute, seconds=datetime.datetime.now().second)
-        if(channel._type is text_channel_type):
+        if(channel.type is discord.ChannelType.text):
             await LogChannel(channel, yesterday, command)
         else:
             print_and_log(LogTypeError ,"Channel: " + channel.name + " is not a TextChannel!")

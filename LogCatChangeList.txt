@@ -1,3 +1,8 @@
+0.10.3 Changelist---------------------------------------------------------------------------------------------------
+- Changed text channel check to using proper enum value
+- added check when using add channel by name
+-- Should fix issue where two different channel types share the same name
+
 0.10.2 Bot Changelist-----------------------------------------------------------------------------------------------
 - Added Discord Api Version number on bot start up
 

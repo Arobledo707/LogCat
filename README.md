@@ -2,6 +2,7 @@
 Requirements:
 Python 3.5.3 or higher  
 Discord.py
+https://discordpy.readthedocs.io/en/latest/intro.html#installing
 
 --- LogCat Guide Version: 0.10.0 ---
 If this is your first time using LogCat, run the script to create the xml
