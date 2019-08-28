@@ -28,7 +28,7 @@ import logging
 logging.basicConfig(filename='./console.txt', filemode='a+', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 # Current version
 # keep this up to date
-Version = '0.10.0'
+Version = '0.10.1'
 
 #------------------------------------------------Constants-------------------------------------------------------------------------
 BotPrefix = []
@@ -44,6 +44,8 @@ AutomaticLogging = False
 LogTypeInfo = 0
 LogTypeWarning = 1
 LogTypeError = 2
+
+text_channel_type = 0
 
 ParentDirectory = 'Logs'
 ConsoleLogs = 'console.txt'
@@ -500,7 +502,10 @@ async def log_date(context, date=None, endDate=None):
                 async with context.typing():
                     for channelID in channelsToLog:
                         channel = client.get_channel(channelID)
-                        await LogChannel(channel, firstDate, 'LogDate')
+                        if(channel._type is text_channel_type):
+                            await LogChannel(channel, firstDate, 'LogDate')
+                        else:
+                            await context.send("Channel: " + channel.name + " is not a TextChannel!")
                     firstDate = firstDate + datetime.timedelta(days=1)
             await context.send(format_message(MessageTypeLog, 'Logs for created from:' + initialDate.strftime(DateFormat) + ' to ' + lastDate.strftime(DateFormat)))
             return
@@ -509,7 +514,10 @@ async def log_date(context, date=None, endDate=None):
     async with context.typing():
         for channelID in channelsToLog:
             channel = client.get_channel(channelID)
-            await LogChannel(channel, firstDate, 'LogDate')
+            if(channel._type is text_channel_type):
+                await LogChannel(channel, firstDate, 'LogDate')
+            else:
+                await context.send("Channel: " + channel.name + " is not a TextChannel!")
         await context.send('Done!')
 
 #--------------------------------------------------log_yesterday---------------------------------------------------------------------
@@ -669,6 +677,9 @@ async def add_channel_to_log(context, newChannel):
         if channelID == channel.id:
             await context.send(format_message(MessageTypeWarning, 'Channel: ' + channel.name + '\nID:' + str(channel.id) + '\nHas already been added.'))
             return
+    if(channel._type is not text_channel_type):
+        await context.send(format_message(MessageTypeLog, 'Channel: ' + channel.name + '\nID:' + str(channel.id) + '\nis not a TextChannel and has not been added.'))
+        return
     channelsToLog.append(channel.id)
     AddToXML(XMLChannel, XMLChannelAttribute, channel.name)
     LogCommand(context.message)
@@ -876,7 +887,10 @@ if it does not exist then it attempts to create a log for that day"""
     else:
         channel = get_channel_by_name(channelName)
         check = GetTimeOffset()
-        await LogChannel(channel, date + datetime.timedelta(hours=GetTimeOffset()), 'get_channel_logs')
+        if(channel.type is text_channel_type):
+            await LogChannel(channel, date + datetime.timedelta(hours=GetTimeOffset()), 'get_channel_logs')
+        else:
+            print_and_log(LogTypeError, "Channel: " + channel.name + " is not a TextChannel!")
     filesToCopy.append(file)
 
 #------------------------------------------get_channel_by_name-------------------------------------------------------------------
@@ -951,7 +965,10 @@ gets each channel and creates logs for yesterday"""
         if channel is None:
             return('Incorrect Channel ID')
         yesterday = datetime.datetime.now() - datetime.timedelta(days=1, hours=datetime.datetime.now().hour - GetTimeOffset(), minutes=datetime.datetime.now().minute, seconds=datetime.datetime.now().second)
-        await LogChannel(channel, yesterday, command)
+        if(channel._type is text_channel_type):
+            await LogChannel(channel, yesterday, command)
+        else:
+            print_and_log(LogTypeError ,"Channel: " + channel.name + " is not a TextChannel!")
 
 #--------------------------------------------------------check_date---------------------------------------------------------------
 def check_date(date):
