@@ -28,7 +28,7 @@ import logging
 logging.basicConfig(filename='./console.txt', filemode='a+', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 # Current version
 # keep this up to date
-Version = '0.10.3'
+Version = '0.10.4'
 
 #------------------------------------------------Constants-------------------------------------------------------------------------
 BotPrefix = []
@@ -494,6 +494,7 @@ async def log_date(context, date=None, endDate=None):
             secondDate = secondDate - datetime.timedelta(days=-1,hours=-GetTimeOffset())
             initialDate = firstDate
             lastDate = secondDate - datetime.timedelta(days=1)
+            date_message = await context.send(format_message(MessageTypeLog, "Currently Logging: " + firstDate.strftime(DateFormat)))
         # if the second date is a correct format Log each channel in
         # ChannelsToLog and increment the day until
         # firstdate is equal or greater than the secondDate
@@ -506,7 +507,8 @@ async def log_date(context, date=None, endDate=None):
                         else:
                             await context.send("Channel: " + channel.name + " is not a TextChannel!")
                     firstDate = firstDate + datetime.timedelta(days=1)
-            await context.send(format_message(MessageTypeLog, 'Logs for created from:' + initialDate.strftime(DateFormat) + ' to ' + lastDate.strftime(DateFormat)))
+                    await date_message.edit(content=format_message(MessageTypeLog, "Currently Logging: " +firstDate.strftime(DateFormat)))
+            await date_message.edit(content=format_message(MessageTypeLog, 'Logs for created from:' + initialDate.strftime(DateFormat) + ' to ' + lastDate.strftime(DateFormat)))
             return
     # if no second date was entered
     # create logs for the first date for each channel in ChannelsToLog

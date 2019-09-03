@@ -1,3 +1,6 @@
+0.10.4 Changelist---------------------------------------------------------------------------------------------------
+- When logging multiple dates bot now says what date is being logged
+
 0.10.3 Changelist---------------------------------------------------------------------------------------------------
 - Changed text channel check to using proper enum value
 - added check when using add channel by name
